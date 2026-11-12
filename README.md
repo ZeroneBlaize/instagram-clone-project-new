@@ -48,3 +48,13 @@ npm test                # Vitest unit + Supertest API integration tests
 npm run build           # Production server compile + Vite client bundle
 npm run verify          # Runs all checks above in sequence
 ```
+
+## Free Live Deployment (No Credit Card Required)
+FrameNew is pre-configured with [`render.yaml`](render.yaml), [`Dockerfile`](Dockerfile), and [`.node-version`](.node-version) so you can deploy the full-stack app (Express API + React SPA + zero-config SQLite, or optional free MongoDB Atlas M0 via `MONGODB_URI`) with zero changes:
+
+- **Render (1-Click Blueprint, Free Tier):**
+  1. Open <https://render.com/deploy?repo=https://github.com/ZeroneBlaize/instagram-clone-project-new> (or connect `ZeroneBlaize/instagram-clone-project-new` as a Blueprint in Render).
+  2. Click **Apply** — `render.yaml` automatically installs, builds, generates `JWT_SECRET`, and starts on Node 24 LTS with `/api/health` checks.
+- **Docker / Leapcell / ClawCloud Run / SnapDeploy / Railway:**
+  - Point the platform to this repo using [`Dockerfile`](Dockerfile) (port `5000`) or `npm run install:all && npm run build` + `npm start`.
+  - Set `NODE_ENV=production` and a 32+ character `JWT_SECRET` (plus optional `MONGODB_URI` for persistent storage across container restarts).

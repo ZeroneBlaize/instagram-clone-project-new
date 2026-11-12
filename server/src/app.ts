@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
@@ -46,17 +47,31 @@ export function createApp(config: AppConfig) {
     })
   );
 
-  const allowedOrigins = env.CLIENT_ORIGIN.split(',').map((o) => o.trim());
+  const allowedOrigins = env.CLIENT_ORIGIN.split(',').map((o) => o.trim()).filter(Boolean);
+  const platformOrigins = [
+    process.env.RENDER_EXTERNAL_URL,
+    process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : undefined,
+  ].filter((origin): origin is string => Boolean(origin));
+
   app.use(
-    cors({
-      origin: (origin, cb) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-          cb(null, true);
-          return;
-        }
-        cb(new Error('CORS origin blocked by security guardrail.'));
-      },
-      credentials: true,
+    cors((req, cb) => {
+      const origin = req.header('Origin');
+      if (!origin) {
+        cb(null, { origin: true, credentials: true });
+        return;
+      }
+      const forwardedHost = req.header('x-forwarded-host') || req.header('host');
+      const forwardedProto = req.header('x-forwarded-proto') || req.protocol;
+      const sameHostOrigin = forwardedHost ? `${forwardedProto}://${forwardedHost}` : '';
+      if (
+        allowedOrigins.includes(origin) ||
+        platformOrigins.includes(origin) ||
+        (sameHostOrigin !== '' && origin === sameHostOrigin)
+      ) {
+        cb(null, { origin: true, credentials: true });
+        return;
+      }
+      cb(new Error('CORS origin blocked by security guardrail.'));
     })
   );
 
@@ -83,7 +98,15 @@ export function createApp(config: AppConfig) {
   app.use('/api/ai', limiters.aiLimiter, createAiRouter());
 
   // Serve built client SPA in production when client/dist exists
-  const clientDistDir = config.clientDistDir ?? path.resolve(process.cwd(), '../client/dist');
+  const moduleDir = path.dirname(fileURLToPath(import.meta.url));
+  const clientDistDir =
+    config.clientDistDir ??
+    [
+      path.resolve(moduleDir, '../../client/dist'),
+      path.resolve(process.cwd(), '../client/dist'),
+      path.resolve(process.cwd(), 'client/dist'),
+    ].find((dir) => fs.existsSync(path.join(dir, 'index.html'))) ??
+    path.resolve(process.cwd(), '../client/dist');
   if (fs.existsSync(path.join(clientDistDir, 'index.html'))) {
     app.use(express.static(clientDistDir));
     app.get('/{*splat}', (req, res, next) => {
