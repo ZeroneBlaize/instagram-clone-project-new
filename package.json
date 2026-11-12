@@ -1,27 +1,24 @@
 {
-  "name": "static",
-  "version": "1.0.0",
-  "description": "This is a static template with no bundling",
-  "main": "index.html",
-  "scripts": {
-    "start": "serve"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/codesandbox-app/static-template.git"
-  },
-  "keywords": [
-    "static",
-    "template",
-    "codesandbox"
-  ],
-  "author": "Ives van Hoorne",
+  "name": "framenew-instagram-clone-new",
+  "version": "2.0.0",
+  "description": "FrameNew — Modern 2026 MERN / Full-Stack Visual Social & Creator Platform with runtime guardrails, licensing hygiene, and end-to-end verification.",
+  "private": true,
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/codesandbox-app/static-template/issues"
+  "author": "Sahil Deshpande",
+  "scripts": {
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "dev": "concurrently -n API,WEB -c cyan,magenta \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "build": "npm --prefix server run build && npm --prefix client run build",
+    "typecheck": "npm --prefix server run typecheck && npm --prefix client run typecheck",
+    "lint": "npm --prefix client run lint",
+    "test": "npm --prefix server test",
+    "check:licenses": "node scripts/check-licenses.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run check:licenses && npm test && npm run build"
   },
-  "homepage": "https://github.com/codesandbox-app/static-template#readme",
   "devDependencies": {
-    "serve": "^11.2.0"
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=22.13.0"
   }
 }

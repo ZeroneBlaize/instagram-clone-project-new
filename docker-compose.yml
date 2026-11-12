@@ -1,0 +1,14 @@
+services:
+  mongodb:
+    image: mongo:8
+    container_name: framenew-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: framenew
+    volumes:
+      - framenew_mongo_data:/data/db
+
+volumes:
+  framenew_mongo_data:

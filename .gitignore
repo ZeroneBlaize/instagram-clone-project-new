@@ -1,1 +1,23 @@
-node_modules
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+**/dist/
+build/
+
+# Runtime & local databases
+.env
+.env.local
+server/data/
+server/uploads/*
+!server/uploads/.gitkeep
+
+# Logs & OS artifacts
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+coverage/
+*.tsbuildinfo
