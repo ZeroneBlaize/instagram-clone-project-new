@@ -4,6 +4,20 @@ Modern 2026 **MERN / Full-Stack TypeScript** visual social, stories, reels, and 
 
 > **Disclaimer**: FrameNew is an independent open-source educational clone and is not affiliated with or endorsed by Meta Platforms, Inc. or Instagram. See [`LICENSING.md`](LICENSING.md) for asset provenance and trademark hygiene.
 
+## Preview
+| Dark Mode — Feed, Stories & Guardrail Card | Light Mode — Creator Insights & Safety Health |
+| :---: | :---: |
+| ![FrameNew Dark Mode Feed](docs/screenshots/feed-dark.png) | ![FrameNew Light Mode Insights](docs/screenshots/insights-light.png) |
+
+<details>
+<summary>Included MIT-Licensed Editorial Sample Media (<code>client/public/media/</code>)</summary>
+
+| Minimalist Arches | Specialty Coffee | Alpine Ridges | Rainy Lantern Lane |
+| :---: | :---: | :---: | :---: |
+| ![Minimalist Arches](client/public/media/arches.jpg) | ![Specialty Coffee](client/public/media/coffee.jpg) | ![Alpine Ridges](client/public/media/alpine.jpg) | ![Rainy Lantern Lane](client/public/media/lanterns.jpg) |
+
+</details>
+
 ## Stack Architecture (MERN + Zero-Config Local Persistence)
 - **Frontend (`client/`)**: React 19, TypeScript, Vite 6, Tailwind CSS v4, React Router 7, Lucide Icons, DOMPurify.
 - **Backend (`server/`)**: Node.js 24 LTS, Express 5, TypeScript, Zod, Helmet, Express Rate Limit, Multer 2, JWT + Bcryptjs.
@@ -48,13 +62,3 @@ npm test                # Vitest unit + Supertest API integration tests
 npm run build           # Production server compile + Vite client bundle
 npm run verify          # Runs all checks above in sequence
 ```
-
-## Free Live Deployment (No Credit Card Required)
-FrameNew is pre-configured with [`render.yaml`](render.yaml), [`Dockerfile`](Dockerfile), and [`.node-version`](.node-version) so you can deploy the full-stack app (Express API + React SPA + zero-config SQLite, or optional free MongoDB Atlas M0 via `MONGODB_URI`) with zero changes:
-
-- **Render (1-Click Blueprint, Free Tier):**
-  1. Open <https://render.com/deploy?repo=https://github.com/ZeroneBlaize/instagram-clone-project-new> (or connect `ZeroneBlaize/instagram-clone-project-new` as a Blueprint in Render).
-  2. Click **Apply** — `render.yaml` automatically installs, builds, generates `JWT_SECRET`, and starts on Node 24 LTS with `/api/health` checks.
-- **Docker / Leapcell / ClawCloud Run / SnapDeploy / Railway:**
-  - Point the platform to this repo using [`Dockerfile`](Dockerfile) (port `5000`) or `npm run install:all && npm run build` + `npm start`.
-  - Set `NODE_ENV=production` and a 32+ character `JWT_SECRET` (plus optional `MONGODB_URI` for persistent storage across container restarts).
